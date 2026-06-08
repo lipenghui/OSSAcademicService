@@ -1,101 +1,101 @@
 # OSSAcademicService
 
-Academic Service is the core service for educational management in the Omni School System, handling student records, course management, scheduling, course selection, grade management, exam administration, and classroom resource scheduling.
+学术服务（Academic Service）是Omni学校系统中教育管理的核心服务，负责处理学生档案、课程管理、排课、选课、成绩管理、考试管理和教室资源调度。
 
-## Overview
+## 概述
 
-Academic Service is the **educational management core service** of the campus management system, responsible for student record management, course management, scheduling, course selection management, grade management, exam management, classroom resource scheduling, and other educational link responsibilities. This service is the hub of teaching operations and has close data interaction with Student Service, Faculty Service, Finance Service, etc.
+学术服务是校园管理系统中的**教育管理核心服务**，负责学生档案管理、课程管理、排课、选课管理、成绩管理、考试管理、教室资源调度等教育教学环节的职责。该服务是教学运营的中心，与学生服务、教职工服务、财务服务等有着紧密的数据交互。
 
-## Key Features
+## 主要功能
 
-### Core Responsibilities
-- ✓ Student Record Management (student profiles, student status changes, graduation management)
-- ✓ Course Management (course database, syllabus, prerequisite/co-requisite/substitute relationships)
-- ✓ Scheduling System (automatic scheduling, manual adjustments, schedule changes, schedule generation)
-- ✓ Course Selection Management (selection rounds, lottery mechanisms, capacity control, conflict detection)
-- ✓ Grade Management (grade entry, GPA calculation, grade analysis, academic warning)
-- ✓ Exam Management (exam scheduling, invigilation assignment, make-up/deferred exams)
-- ✓ Classroom Resources (resource calendar, borrowing approval, utilization statistics)
-- ✓ Teaching Plans and Training Programs (program version management, teaching execution plans)
+### 核心职责
+- ✓ 学籍管理（学生档案、学籍异动、毕业管理）
+- ✓ 课程管理（课程库、教学大纲、先修/并修/替代关系）
+- ✓ 排课系统（自动排课、手动调整、调课、课表生成）
+- ✓ 选课管理（选课轮次、抽签机制、容量控制、冲突检测）
+- ✓ 成绩管理（成绩录入、GPA计算、成绩分析、学业预警）
+- ✓ 考试管理（考试安排、监考分配、补考/缓考）
+- ✓ 教室资源（资源日历、借用审批、利用率统计）
+- ✓ 教学计划与培养方案（方案版本管理、教学执行计划）
 
-### Boundaries
-- ✗ Does not store user authentication information (managed by Identity Service)
-- ✗ Does not handle admission processes (managed by Student Service)
-- ✗ Does not manage faculty records and workload (managed by Faculty Service)
-- ✗ Does not handle tuition billing and payments (managed by Finance Service)
-- ✗ Does not handle access control/leave management (managed by Security Service)
+### 边界范围
+- ✗ 不存储用户认证信息（由身份服务管理）
+- ✗ 不处理招生录取流程（由学生服务管理）
+- ✗ 不管理教职工档案和工作量（由教职工服务管理）
+- ✗ 不处理学费账单和支付（由财务服务管理）
+- ✗ 不处理门禁/请假管理（由安全服务管理）
 
-## Architecture
+## 架构
 
-### Domain Model Overview
+### 领域模型概览
 
 ```
-Academic Service Domain
+学术服务领域
 
-├── Student Record Subdomain
-│   ├── StudentProfile (aggregate root)
-│   ├── StatusChange (aggregate root)
-│   └── GraduationAudit (aggregate root)
+├── 学籍子域
+│   ├── StudentProfile（聚合根）
+│   ├── StatusChange（聚合根）
+│   └── GraduationAudit（聚合根）
 │
-├── Course Management Subdomain
-│   ├── Course (aggregate root)
-│   └── TrainingPlan (aggregate root)
+├── 课程管理子域
+│   ├── Course（聚合根）
+│   └── TrainingPlan（聚合根）
 │
-├── Scheduling Subdomain
-│   ├── TeachingTask (aggregate root)
-│   ├── ScheduleItem (entity)
-│   └── ScheduleAdjustment (aggregate root)
+├── 排课子域
+│   ├── TeachingTask（聚合根）
+│   ├── ScheduleItem（实体）
+│   └── ScheduleAdjustment（聚合根）
 │
-├── Course Selection Subdomain
-│   ├── SelectionRound (aggregate root)
-│   └── SelectionRecord (entity)
+├── 选课子域
+│   ├── SelectionRound（聚合根）
+│   └── SelectionRecord（实体）
 │
-├── Grades Subdomain
-│   ├── ScoreRecord (aggregate root)
-│   ├── ScoreRule (value object)
-│   └── GpaSummary (entity)
+├── 成绩子域
+│   ├── ScoreRecord（聚合根）
+│   ├── ScoreRule（值对象）
+│   └── GpaSummary（实体）
 │
-├── Exam Subdomain
-│   ├── ExamArrangement (aggregate root)
-│   └── DeferredExam (aggregate root)
+├── 考试子域
+│   ├── ExamArrangement（聚合根）
+│   └── DeferredExam（聚合根）
 │
-└── Classroom Resource Subdomain
-    ├── Building (aggregate root)
-    ├── Classroom (aggregate root)
-    └── ClassroomBooking (aggregate root)
+└── 教室资源子域
+    ├── Building（聚合根）
+    ├── Classroom（聚合根）
+    └── ClassroomBooking（聚合根）
 ```
 
-### Service Dependencies
+### 服务依赖
 
 ```
                     ┌──────────────┐
-                    │  Identity    │  ← JWT Authentication/Permission Validation
+                    │  Identity    │  ← JWT身份验证/权限校验
                     └──────┬───────┘
                            │
               ┌────────────┼────────────┐
               ▼            ▼            ▼
-        ┌──────────┐ ┌──────────┐ ┌──────────┐
-        │ Student  │ │ Faculty  │ │ Finance  │
-        │ Service  │ │ Service  │ │ Service  │
-        └──────────┘ └──────────┘ └──────────┘
+         ┌──────────┐ ┌──────────┐ ┌──────────┐
+         │ Student  │ │ Faculty  │ │ Finance  │
+         │ Service  │ │ Service  │ │ Service  │
+         └──────────┘ └──────────┘ └──────────┘
 ```
 
-### Database Schema
+### 数据库模式
 
-The service uses MySQL 8.0+ with a database named `db_academic`.
+该服务使用MySQL 8.0+，数据库名为`db_academic`。
 
-Key tables include:
-- `t_student_profile` - Student profile table
-- `t_course` - Course table
-- `t_teaching_task` - Teaching task table
-- `t_schedule_item` - Scheduling item table
-- `t_score_record` - Score record table
-- `t_exam_arrangement` - Exam arrangement table
-- `t_classroom` - Classroom table
+主要表包括：
+- `t_student_profile` - 学生档案表
+- `t_course` - 课程表
+- `t_teaching_task` - 教学任务表
+- `t_schedule_item` - 排课条目表
+- `t_score_record` - 成绩记录表
+- `t_exam_arrangement` - 考试安排表
+- `t_classroom` - 教室表
 
-## Technical Details
+## 技术细节
 
-- **Ports**: HTTP 5002 / gRPC 50052
-- **Database**: `db_academic` (MySQL 8.0+)
-- **Architecture**: Microservice
-- **Domain-Driven Design**: Implements bounded contexts for different academic management areas
+- **端口**: HTTP 5002 / gRPC 50052
+- **数据库**: `db_academic` (MySQL 8.0+)
+- **架构**: 微服务
+- **领域驱动设计**: 为不同的学术管理领域实施界限上下文
