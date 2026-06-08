@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/OSSAcademicService.API/OSSAcademicService.API.csproj" />
+    <Project Path="src/OSSAcademicService.Application/OSSAcademicService.Application.csproj" />
+    <Project Path="src/OSSAcademicService.Domain/OSSAcademicService.Domain.csproj" />
+    <Project Path="src/OSSAcademicService.Infrastructure/OSSAcademicService.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/OSSAcademicService.Tests/OSSAcademicService.Tests.csproj" />
+  </Folder>
+</Solution>

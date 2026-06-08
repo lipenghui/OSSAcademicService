@@ -1,0 +1,45 @@
+# Build results
+bin/
+obj/
+out/
+
+# User-specific files
+.vs/
+*.userprefs
+*.user
+*.userosscache
+*.suo
+*.userfiletable
+
+# IDE settings
+.idea/
+*.sw?
+
+# OS generated files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
+desktop.ini
+
+# Environment specific files
+.env
+.config
+appsettings.Production.json
+
+# Local configuration
+appsettings.Development.json
+
+# Test coverage
+coverage/
+
+# NuGet packages
+*.nupkg
+packages/
+.nuget/
+.nugetpackages/
+
+# Security
+secrets/
+keys/
+certs/
